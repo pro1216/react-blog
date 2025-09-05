@@ -1,23 +1,24 @@
-import '../styles/index.css';
-import '../styles/article.css';
+// src/component/Main.tsx
 import React, { useState } from "react";
+import { ThemeToggle } from "./ToggleComponent";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { Link } from "react-router";
 import { useEffect } from "react";
+import { SearchBar } from "./search/SearchBar"; // アイコン用
 import { useNavigate } from "react-router-dom";
 
 
 export const Header: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
-    
+
     const toggleMenu = (): void => {
         setMenuOpen((prev) => !prev);
     }
-    if(menuOpen){
+    if (menuOpen) {
         document.body.style.overflow = "hidden";
-    }else{
+    } else {
         document.body.style.overflow = "auto";
     }
     return (
@@ -28,6 +29,10 @@ export const Header: React.FC = () => {
                 <div></div>
             </div>
             <h1>My Blog</h1>
+            <SearchBar onSearch={(query) => console.log(query)} />
+            <button className="theme-toggle text-gray-700 dark:text-gray-200">
+                <ThemeToggle />
+            </button>
             <nav id={'mobile-menu'} className={menuOpen ? "show" : "hidden"}>
                 <ul>
                     <li><Link to="/">ホーム</Link></li>
@@ -43,11 +48,11 @@ export const Header: React.FC = () => {
 
 interface Article {
     _id: string;
-    title:string;
-    content:string;
+    title: string;
+    content: string;
 }
 export const Home: React.FC = () => {
-    const [article, setArticle] = useState<Article[]>([{_id:"",title:"",content:""}]);
+    const [article, setArticle] = useState<Article[]>([{ _id: "", title: "", content: "" }]);
     const navigate = useNavigate();
     const fetchArticles = async () => {
         try {
@@ -65,22 +70,34 @@ export const Home: React.FC = () => {
     useEffect(() => {
         fetchArticles();
     })
-    if(article.length < 1 || article[0]._id === ""){
+    if (article.length < 1 || article[0]._id === "") {
         return (
             <main>
                 <p>記事がありません</p>
-                <button onClick= {()=> navigate(`/newArticle`) }>記事を追加</button>
+                <button onClick={() => navigate(`/newArticle`)}>記事を追加</button>
             </main>
         );
-    } 
+    }
+    //記事の文字数取得
+    function getContent(content: string): string {
+        if(!content) return "";
+        const strippedContent = content.replace(/[\n\r]/g, ''); // 改行コードを削除
+        const contentLength = strippedContent.length;
+        if(contentLength > 20) {
+            // 20文字を超える場合の処理
+            return strippedContent.slice(0, 20) + '...';
+        }
+        return strippedContent;
+    }
     return (
         <main>
             <section id="home">
                 <h2>最新記事</h2>
                 <article>
                     <div id="article-header">{article[0].title}</div>
-                    <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{article[0].content}</ReactMarkdown></div>
-                    <button style={{marginTop: "15px"}} onClick = {() => navigate(`/article/${article[0]._id}`)}>続きを読む</button>
+                    <hr />
+                    <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{getContent(article[0].content)}</ReactMarkdown></div>
+                    <button id="read-more-button" onClick={() => navigate(`/article/${article[0]._id}`)}>続きを読む</button>
                 </article>
             </section>
             <h2>アーカイブス</h2>
@@ -89,8 +106,9 @@ export const Home: React.FC = () => {
                     <section>
                         <article>
                             <div id="article-header">{ds.title}</div>
-                            <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{ds.content}</ReactMarkdown></div>
-                            <button style={{marginTop: "15px"}} onClick = {() => navigate(`/article/${ds._id}`)}>続きを読む</button>
+                            <hr />
+                            <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{getContent(ds.content)}</ReactMarkdown></div>
+                            <button id="read-more-button" onClick={() => navigate(`/article/${ds._id}`)}>続きを読む</button>
                         </article>
                     </section>
                 )

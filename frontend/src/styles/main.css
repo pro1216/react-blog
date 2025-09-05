@@ -1,13 +1,33 @@
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
-  overflow-y: auto;
+/* 変数はファイルの先頭に置くのがおすすめ */
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
 }
 
+/* ダークテーマ */
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --text: #e6eef8;
+  --muted: #9ca3af;
+  --accent: #60a5fa;
+}
+
+/* リセット / 基本 */
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  overflow-y: auto;
+  background: var(--bg);   /* <-- varを正しく使用 */
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+/* header */
 .header {
   background: #333;
   color: #fff;
@@ -16,155 +36,139 @@ body {
   position: relative;
 }
 
-.header h1 {
-  margin: 0;
-}
-
+/* ハンバーガー */
 .hamburger {
+  width: 30px;
+  height: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 20px;
   cursor: pointer;
   position: absolute;
   top: 15px;
   left: 15px;
+  z-index: 3;
 }
-
 .hamburger div {
   width: 100%;
   height: 3px;
-  background-color: #fff;
-  transition: ease-in-out 0.3s;
-}
-.hamburger.open {
-  display: block;
-  position: fixed;
-  top: 10px;
-  right: 30px;
-  width: 30px;
-  height: 30px;
-  transition: all .5s;
-  cursor: pointer;
-  z-index: 3;
-}
-.hamburger.open div{
-  display: block;
-  position: absolute;
-   width: 100%;
-  height: 3px;
-  background-color: #ffffff;
-  transition: ease-in-out 0.3s;
-}
-.hamburger div:nth-of-type(1) {
-  top: 4px;
-}
-.hamburger div:nth-of-type(2) {
-  top: 14px;
-}
-.hamburger div:nth-of-type(3) {
-  bottom: 4px;
+  background-color: var(--text); /* 目立つ色を使う */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
 }
 .hamburger.open div:nth-child(1) {
-  -webkit-transform: translateY(5px) rotate(-315deg);
-  transform: translateY(5px) rotate(-315deg);
+  transform: translateY(8px) rotate(45deg);  /* ← Y位置を調整 */
 }
 .hamburger.open div:nth-child(2) {
-  opacity: 0;
+  opacity: 0; /* 真ん中のバーを消す */
 }
 .hamburger.open div:nth-child(3) {
-  -webkit-transform: translateY(-5px) rotate(315deg);
-  transform: translateY(-5px) rotate(315deg);
+  transform: translateY(-8px) rotate(-45deg); /* ← 反対方向に回転 */
 }
+
+/* モバイルメニュー（position: fixed を使用） */
 #mobile-menu {
-  background: #dddddd;
-  position: absolute;
+  position: fixed;             /* ← 修正: display: fixed は間違い */
   top: 0;
   left: 0;
-  width: 30%;
-  height: 100%;
-  display: fixed;
-  padding-top: 60px;
-  flex-direction: column;
+  width: 80%;                  /* 小さい画面用に調整 */
+  max-width: 320px;
   height: 100vh;
-  /* justify-content: center; */
-  /* align-items: center; */
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
-}
-
-#mobile-menu ul {
-  list-style: none;
-  text-align: center;
-  padding: 0;
-}
-
-#mobile-menu ul li {
-  margin: 15px 0;
-}
-
-#mobile-menu ul li a {
-  color: black;
-  text-decoration: none;
-  font-size: 1.5rem;
-}
-
-#mobile-menu.show {
-  transform: translateY(0);
-}
-#mobile-menu.hidden {
-  display: none;
-}
-.hamburger.open{
+  padding-top: 60px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 20px;
-  cursor: pointer;
-  position: absolute;
-  top: 30px;
-  left: 15px;
+  background: var(--muted);
+  transform: translateX(-100%); /* 初期は画面外へ */
+  transition: transform 0.3s ease-in-out;
+  z-index: 2;
 }
+#mobile-menu ul { list-style: none; padding: 0; margin: 0; text-align: center; }
+#mobile-menu ul li { margin: 15px 0; }
+#mobile-menu ul li a { color: var(--text); text-decoration: none; font-size: 1.2rem; }
 
-/*main以降*/
+/* 開いたときはtranslateX(0)にする（translateYと矛盾しない） */
+#mobile-menu.show {
+  transform: translateX(0);
+}
+hr{
+  border-top: 1px solid var(--text);
+}
+/* main / article */
 main {
+  background: var(--bg); /* -var は誤り */
   padding: 20px;
-  min-height: calc(100vh - 120px); /* header 60px + footer 60px を引いた残り */
+  min-height: 100vh;
   overflow-y: auto;
 }
-
-section {
-  margin-bottom: 20px;
-}
-
 article {
-  background: #fff;
-  padding: 30px;
-  border: 1px solid #ddd;
+  background: var(--bg);
+  padding: 10px 20px;
+  border: 1px solid var(--text);
   border-radius: 5px;
+  margin-bottom: 10px;
+  width: 65%;
 }
 
-button {
-  margin-top: 5px;
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #555;
-}
-
+/* footer */
 footer {
   text-align: center;
   background: #333;
   color: #fff;
   padding: 5px 0;
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
+}
+
+/* トグル (例) */
+.theme-toggle {
+  position: absolute;
+  right: 2px;
+  top: 10px;
+  background: transparent;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.theme-toggle:hover {
+  background: var(--main);
+  border-radius: 4px;
+}
+#read-more-button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar {
+  position: absolute;
+  align-items: right;
+  right: 40px;
+  top: 10px;
+  padding: 1px 2px;
+  border-radius: 4px;
+}
+
+.search-bar input {
+  border: 1px solid white;
+  padding: 1px 2px;
+  background: transparent;
+  border-radius: 4px;
+  outline: none;
+  color: var(--text);
+}
+#fa-search {
+  display: flex;
+  align-items: center;
+  background-color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 10px;
+  border: 1px solid var(--text);
 }

@@ -3,8 +3,6 @@ import { data, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Header, Footer } from './Main';
-import '../styles/index.css';
-import "../styles/article.css";
 import remarkBreaks from "remark-breaks";
 
 interface Article {
