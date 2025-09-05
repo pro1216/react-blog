@@ -2,7 +2,7 @@
 import express from "express";
 import dotenv from "dotenv"
 import { DbService } from "./db/dbConfig";
-import { userRoutes } from "./db/test";
+import { userRoutes } from "./db/action";
 import cors from 'cors';
 dotenv.config();
 

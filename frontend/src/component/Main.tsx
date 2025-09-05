@@ -1,7 +1,9 @@
-import { App } from "./App"
-import '../styles/App.css';
 import '../styles/index.css';
+import '../styles/article.css';
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
 import { Link } from "react-router";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +14,11 @@ export const Header: React.FC = () => {
     
     const toggleMenu = (): void => {
         setMenuOpen((prev) => !prev);
+    }
+    if(menuOpen){
+        document.body.style.overflow = "hidden";
+    }else{
+        document.body.style.overflow = "auto";
     }
     return (
         <header className="header">
@@ -26,6 +33,7 @@ export const Header: React.FC = () => {
                     <li><Link to="/">ホーム</Link></li>
                     <li><Link to="/about">自己紹介</Link></li>
                     <li><Link to="/contact">お問い合わせ</Link></li>
+                    <li><Link to="/newArticle">新規作成</Link></li>
                 </ul>
             </nav>
 
@@ -57,15 +65,22 @@ export const Home: React.FC = () => {
     useEffect(() => {
         fetchArticles();
     })
-    
+    if(article.length < 1 || article[0]._id === ""){
+        return (
+            <main>
+                <p>記事がありません</p>
+                <button onClick= {()=> navigate(`/newArticle`) }>記事を追加</button>
+            </main>
+        );
+    } 
     return (
         <main>
             <section id="home">
                 <h2>最新記事</h2>
                 <article>
-                    <h3 >{article[0].title}</h3>
-                    <p>{article[0].content}</p>
-                    <button onClick= {()=> navigate(`/article/${article[0]._id}`) }>続きを読む</button>
+                    <div id="article-header">{article[0].title}</div>
+                    <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{article[0].content}</ReactMarkdown></div>
+                    <button style={{marginTop: "15px"}} onClick = {() => navigate(`/article/${article[0]._id}`)}>続きを読む</button>
                 </article>
             </section>
             <h2>アーカイブス</h2>
@@ -73,9 +88,9 @@ export const Home: React.FC = () => {
                 return (
                     <section>
                         <article>
-                            <h3 >{ds.title}</h3>
-                            <p>{ds.content}</p>
-                            <button onClick = {() => navigate(`/article/${ds._id}`)}>続きを読む</button>
+                            <div id="article-header">{ds.title}</div>
+                            <div id="article-content"><ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{ds.content}</ReactMarkdown></div>
+                            <button style={{marginTop: "15px"}} onClick = {() => navigate(`/article/${ds._id}`)}>続きを読む</button>
                         </article>
                     </section>
                 )

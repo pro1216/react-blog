@@ -1,0 +1,75 @@
+div#title-area {
+  width: "100%";
+  height: "40px";
+  font-size: "20px";
+  padding: "5px";
+  margin-bottom: 5px;
+}
+
+#markdown-input{
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    background-color: #fafafa;
+}
+#markdown-preview{
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    background-color: #fafafa;
+}
+#regist-button{
+  margin-bottom: 32px;
+  margin-top: 16px;
+  margin-left: 32px;
+  padding: 5px;
+}
+
+#title-input {
+  width: 100%;
+  height: 40px;
+  font-size: 20px;
+  padding: 5px;
+}
+#editor-area {
+  display: flex;
+  gap: 20px;
+}
+#markdown-editor {
+  flex: 1;
+}
+#markdown-buttons {
+  margin-bottom: 5px;
+}
+
+#heading-button {
+  margin-right: 10px;
+  padding: 3px 6px;
+  background-color: black;
+  color: white;
+}
+#list-button {
+  padding: 3px 6px;
+  background-color: black;
+  color: white;
+}
+#toggle-button {
+  margin-bottom: 32px;
+  margin-top: 16px;
+  padding: 5px;
+}
+#article-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+#article-content {
+  font-size: 16px;
+  line-height: 1.6;
+}
