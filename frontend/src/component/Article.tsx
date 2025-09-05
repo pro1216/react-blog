@@ -3,7 +3,6 @@ import { data, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Header, Footer } from './Main';
-import '../styles/index.css';
 import remarkBreaks from "remark-breaks";
 
 interface Article {
@@ -42,7 +41,7 @@ export const ExArticle: React.FC = () => {
   }, [id]);
 
   if (!article) return <p>読み取り中....</p>;
-  const sampleMarkdown = `# タイトル\nこれは **Markdown** のサンプルです。`;
+
   return (
     <ArticleEditor
       id={id!}
@@ -87,10 +86,11 @@ export default function ArticleEditor({
 }: ArticleEditorProps) {
   const [isEnding, setIsEnding] = useState(false);
   const [content, setContent] = useState(initialContent);
+  const [title, setTitle] = useState(initialTitle);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   //登録
-  async function regist(content: string) {
+  async function update(title:string,content: string) {
     if (content && id) {
       await fetch(`http://localhost:3002/api/article/${id}`, {
         method: "POST",
@@ -113,74 +113,83 @@ export default function ArticleEditor({
     }
   }
   return (
-    <main>
-      <div style={{ display: "flex", gap: "20px" }}>
-        {isEnding ? (
-          <div style={{ flex: 1 }}>
-            <div style={{ marginBottom: "5px" }}>
-              <button style={{ marginRight: "10px", padding: "3px 6px", backgroundColor: "black" }}
-                onClick={() =>
-                  insertMarkDown("**", "太字", textareaRef, content, setContent)
-                }
-              >
-                太字
-              </button>
-              <button style={{ marginRight: "10px", padding: "3px 6px", backgroundColor: "black" }}
-                translate="no"
-                onClick={() =>
-                  insertMarkDown("# ", "見出し", textareaRef, content, setContent)
-                }
-              >
-                見出し
-              </button>
-              <button style={{ padding: "3px 6px", backgroundColor: "black" }}
-                onClick={() =>
-                  insertMarkDown("- ", "リスト", textareaRef, content, setContent)
-                }
-              >
-                リスト
-              </button>
-            </div>
-            <div style={{ display: "flex", gap: "20px" }}>
-            <textarea
-              ref={textareaRef}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={10}
-              cols={60}
-            />
-            {/* プレビューエリア */}
-            <div
-              style={{
-                flex: 1,
-                border: "1px solid #ccc",
-                padding: "10px",
-                height: "400px",          // 固定の高さ
-                overflowY: "auto",        // 縦スクロール
-                backgroundColor: "#fafafa" // 見やすいように背景色
-              }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{content}</ReactMarkdown>
+      <main>
+        <div id="title-area">
+          <input
+            id="title-input"
+            type="text"
+            placeholder="タイトル"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+  
+        <div id="editor-area">
+          {isEnding ? (
+            <div id="markdown-editor">
+              <div id="markdown-buttons">
+                <button
+                  style={{
+                    marginRight: "10px",
+                    padding: "3px 6px",
+                    backgroundColor: "black",
+                    color: "white",
+                  }}
+                  onClick={() =>
+                    insertMarkDown("**", "太字", textareaRef, content, setContent)
+                  }
+                >
+                  太字
+                </button>
+                <button
+                  id="heading-button"
+                  translate="no"
+                  onClick={() =>
+                    insertMarkDown("# ", "見出し", textareaRef, content, setContent)
+                  }
+                >
+                  見出し
+                </button>
+                <button
+                  id="list-button"
+                  onClick={() =>
+                    insertMarkDown("- ", "リスト", textareaRef, content, setContent)
+                  }
+                >
+                  リスト
+                </button>
               </div>
+  
+              <textarea
+                id="markdown-input"
+                ref={textareaRef}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+  
+              />
             </div>
-            <br />
-            <button style={{ marginBottom: "32px", marginTop: "16px", padding: "5px" }} onClick={() => setIsEnding(false)}>保存</button>
-            <button style={{ marginBottom: "32px", marginTop: "16px", marginLeft: "32px", padding: "5px" }} onClick={() => regist(content)}>登録</button>
-          </div>
-        ) : (
-          <div
-            style={{
-              flex: 1,
-              border: "1px solid #ccc",
-              padding: "30px 10px",
-              height: "400px",          // 固定の高さ
-              overflowY: "auto",        // 縦スクロール
-              backgroundColor: "#fafafa", // 見やすいように背景色
-            }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-            <button style={{ padding: "3px 6px", backgroundColor: "black"}} onClick={() => setIsEnding(true)}>編集</button>
-          </div>
-        )}
-      </div>
-    </main>
-  );
+          ) : (
+            <div id="markdown-preview" >
+              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+                {content}
+              </ReactMarkdown>
+            </div>
+          )}
+        </div>
+  
+        <button
+          id="toggle-button"
+          onClick={() => setIsEnding(!isEnding)}
+        >
+          {isEnding ? "プレビュー" : "編集"}
+        </button>
+  
+        <button
+         id="regist-button"
+          onClick={() => update(content, title)}
+        >
+          登録
+        </button>
+      </main>
+    );
 }
