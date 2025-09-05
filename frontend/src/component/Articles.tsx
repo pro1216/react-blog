@@ -1,7 +1,7 @@
 import { json } from "express";
 import { useEffect } from "react";
 import { useState } from "react"
-import '../styles/App.css';
+import '../styles/main.css';
 import '../styles/index.css';
 
 interface Article {
