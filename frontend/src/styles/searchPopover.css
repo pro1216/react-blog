@@ -1,0 +1,73 @@
+.search-wrapper {
+  display: inline-block;
+  position: relative;
+}
+#searchIcon {
+  font-size: 20px;
+  cursor: pointer;
+}
+/* トリガーボタン */
+.search-trigger {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* オーバーレイ（背面操作ブロック） */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+/* 検索ポップオーバー */
+.search-popover {
+  position: fixed;
+  top: 60px;      /* headerの高さを考慮 */
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* アニメーション */
+.search-popover.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.search-popover.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* 入力欄 */
+.search-input {
+  color:black;
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 6px;
+}
+
+/* 閉じるボタン */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text);
+}
