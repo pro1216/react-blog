@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { data, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Header, Footer } from './Main';
+import { Common } from "../component/Common";
 import remarkBreaks from "remark-breaks";
 
 interface Article {
@@ -18,16 +18,7 @@ interface ArticleEditorProps {
   save?: (content: string) => void;
 }
 
-export const Article: React.FC = () => {
-  return (
-    <body>
-      <Header />
-      <ExArticle />
-      <Footer />
-    </body>
-  )
-}
-export const ExArticle: React.FC = () => {
+export function Article() {
   const { id } = useParams();
   const [article, setArticle] = useState<Article | null>(null);
 
@@ -49,13 +40,13 @@ export const ExArticle: React.FC = () => {
       initialContent={article.content}
     />
   );
-};
+}
 
 // Markdown挿入関数
 const insertMarkDown = (
   syntax: string,
   placeholder: string,
-  textareaRef: React.RefObject<HTMLTextAreaElement>,
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>,
   content: string,
   setContent: React.Dispatch<React.SetStateAction<string>>
 ) => {
@@ -79,7 +70,7 @@ const insertMarkDown = (
   }, 0);
 };
 
-export default function ArticleEditor({
+function ArticleEditor({
   id,
   initialTitle,
   initialContent,
@@ -90,7 +81,7 @@ export default function ArticleEditor({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   //登録
-  async function update(title:string,content: string) {
+  async function update(title: string, content: string) {
     if (content && id) {
       await fetch(`http://localhost:3002/api/article/${id}`, {
         method: "POST",
@@ -99,20 +90,21 @@ export default function ArticleEditor({
         },
         body: JSON.stringify({
           title: initialTitle,
-          content: content
+          content: content,
         }),
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           console.log("更新成功:", data);
-          alert("記事更新成功")
+          alert("記事更新成功");
         })
-        .catch(err => {
+        .catch((err) => {
           alert("記事の登録に失敗しました");
         });
     }
   }
   return (
+    <Common>
       <main>
         <div id="title-area">
           <input
@@ -123,7 +115,7 @@ export default function ArticleEditor({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-  
+
         <div id="editor-area">
           {isEnding ? (
             <div id="markdown-editor">
@@ -136,7 +128,13 @@ export default function ArticleEditor({
                     color: "white",
                   }}
                   onClick={() =>
-                    insertMarkDown("**", "太字", textareaRef, content, setContent)
+                    insertMarkDown(
+                      "**",
+                      "太字",
+                      textareaRef,
+                      content,
+                      setContent
+                    )
                   }
                 >
                   太字
@@ -145,7 +143,13 @@ export default function ArticleEditor({
                   id="heading-button"
                   translate="no"
                   onClick={() =>
-                    insertMarkDown("# ", "見出し", textareaRef, content, setContent)
+                    insertMarkDown(
+                      "# ",
+                      "見出し",
+                      textareaRef,
+                      content,
+                      setContent
+                    )
                   }
                 >
                   見出し
@@ -153,43 +157,43 @@ export default function ArticleEditor({
                 <button
                   id="list-button"
                   onClick={() =>
-                    insertMarkDown("- ", "リスト", textareaRef, content, setContent)
+                    insertMarkDown(
+                      "- ",
+                      "リスト",
+                      textareaRef,
+                      content,
+                      setContent
+                    )
                   }
                 >
                   リスト
                 </button>
               </div>
-  
+
               <textarea
                 id="markdown-input"
                 ref={textareaRef}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-  
               />
             </div>
           ) : (
-            <div id="markdown-preview" >
+            <div id="markdown-preview">
               <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
                 {content}
               </ReactMarkdown>
             </div>
           )}
         </div>
-  
-        <button
-          id="toggle-button"
-          onClick={() => setIsEnding(!isEnding)}
-        >
+
+        <button id="toggle-button" onClick={() => setIsEnding(!isEnding)}>
           {isEnding ? "プレビュー" : "編集"}
         </button>
-  
-        <button
-         id="regist-button"
-          onClick={() => update(content, title)}
-        >
+
+        <button id="regist-button" onClick={() => update(content, title)}>
           登録
         </button>
       </main>
-    );
+    </Common>
+  );
 }
