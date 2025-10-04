@@ -4,14 +4,14 @@ import dotenv from "dotenv"
 import { DbService } from "./db/dbConfig";
 import { userRoutes } from "./db/action";
 import cors from 'cors';
-dotenv.config();
+require('dotenv').config({ path: './db.env' });
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // 環境変数からURIを取得
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017";
+const MONGO_URI = process.env.MONGO_URI || "";
 const DB_NAME = process.env.DB_NAME || "blog";
 
 if (!MONGO_URI || !DB_NAME) {
