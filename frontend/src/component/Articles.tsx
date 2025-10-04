@@ -10,7 +10,7 @@ interface Article {
     content:string;
   }
 
-export const Articles: React.FC = () => {
+export function Articles ()  {
     const [article, setArticle] = useState<Article[]>([]);
     const [title, setTile] = useState("");
     const [content, setContent] = useState("");

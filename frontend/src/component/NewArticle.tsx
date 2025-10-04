@@ -2,16 +2,10 @@ import React, { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Header, Footer } from "./Main";
+import { Common } from "../component/Common";
 import "../styles/index.css";
 import "../styles/article.css";
 import remarkBreaks from "remark-breaks";
-
-interface Article {
-  _id: string;
-  title: string;
-  content: string;
-}
 
 interface ArticleEditorProps {
   id: string;
@@ -20,35 +14,27 @@ interface ArticleEditorProps {
   save?: (content: string) => void;
 }
 
-export const NewArticle: React.FC = () => {
-  return (
-    <div>
-      <Header />
-      <ExArticle />
-      <Footer />
-    </div>
-  );
-};
-
-export const ExArticle: React.FC = () => {
+export default function NewArticle() {
   const { id } = useParams();
   const sampleMarkdown = `# タイトル\nこれは **Markdown** のサンプルです。`;
   const sampleTitle = "タイトル";
 
   return (
-    <ArticleEditor
-      id={id!}
-      initialTitle={sampleTitle}
-      initialContent={sampleMarkdown}
-    />
+    <Common>
+      <ArticleEditor
+        id={id!}
+        initialTitle={sampleTitle}
+        initialContent={sampleMarkdown}
+      />
+    </Common>
   );
-};
+}
 
 // Markdown挿入関数
 const insertMarkDown = (
   syntax: string,
   placeholder: string,
-  textareaRef: React.RefObject<HTMLTextAreaElement>,
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>,
   content: string,
   setContent: React.Dispatch<React.SetStateAction<string>>
 ) => {
@@ -72,7 +58,7 @@ const insertMarkDown = (
   }, 0);
 };
 
-export default function ArticleEditor({
+function ArticleEditor({
   id,
   initialTitle,
   initialContent,
@@ -139,7 +125,13 @@ export default function ArticleEditor({
                 id="heading-button"
                 translate="no"
                 onClick={() =>
-                  insertMarkDown("# ", "見出し", textareaRef, content, setContent)
+                  insertMarkDown(
+                    "# ",
+                    "見出し",
+                    textareaRef,
+                    content,
+                    setContent
+                  )
                 }
               >
                 見出し
@@ -147,7 +139,13 @@ export default function ArticleEditor({
               <button
                 id="list-button"
                 onClick={() =>
-                  insertMarkDown("- ", "リスト", textareaRef, content, setContent)
+                  insertMarkDown(
+                    "- ",
+                    "リスト",
+                    textareaRef,
+                    content,
+                    setContent
+                  )
                 }
               >
                 リスト
@@ -159,11 +157,10 @@ export default function ArticleEditor({
               ref={textareaRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-
             />
           </div>
         ) : (
-          <div id="markdown-preview" >
+          <div id="markdown-preview">
             <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
               {content}
             </ReactMarkdown>
@@ -171,17 +168,11 @@ export default function ArticleEditor({
         )}
       </div>
 
-      <button
-        id="toggle-button"
-        onClick={() => setIsEnding(!isEnding)}
-      >
+      <button id="toggle-button" onClick={() => setIsEnding(!isEnding)}>
         {isEnding ? "プレビュー" : "編集"}
       </button>
 
-      <button
-       id="regist-button"
-        onClick={() => regist(content, title)}
-      >
+      <button id="regist-button" onClick={() => regist(content, title)}>
         登録
       </button>
     </main>

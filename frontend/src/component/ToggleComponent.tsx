@@ -1,8 +1,10 @@
 // src/ThemeToggle.tsx
 import React, { useEffect, useState } from 'react';
 import { getInitialTheme, applyThemeToDocument, setStoredTheme, Theme } from '../theme';
+import { TiAdjustBrightness,TiAdjustContrast  } from "react-icons/ti";
+import { IconBaseProps } from "react-icons";
 
-export const ThemeToggle: React.FC = () => {
+export function ToggleComponent(){
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
   const [prev, setPrev] = useState(false);
 
@@ -31,13 +33,16 @@ export const ThemeToggle: React.FC = () => {
 
   const toggle = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
 
+  const DarkIcon = TiAdjustContrast as (props: IconBaseProps) => JSX.Element;
+  const LightIcon = TiAdjustBrightness as (props: IconBaseProps) => JSX.Element;
   return (
-    <button
-      className="theme-toggle"
+    <div
+      id="theme-toggle"
       aria-label="Toggle color theme"
       onClick={toggle}
     >
-      {theme === 'dark' ? '🌙' : '☀️'}
-    </button>
+      {theme === 'dark' ? <DarkIcon size={22}/> : <LightIcon size={22} />}
+    </div>
   );
 };
+export default ToggleComponent;
