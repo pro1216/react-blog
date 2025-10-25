@@ -16,7 +16,7 @@ export default function Contact() {
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
     try {
       setLoading(true);
-      fetch("https://react-blog-4bm0.onrender.com/api/form", {
+      fetch(`${process.env.REACT_APP_API_URL}/api/form`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

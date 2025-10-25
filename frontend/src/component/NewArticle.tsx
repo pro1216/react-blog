@@ -71,7 +71,7 @@ function ArticleEditor({
   // 登録
   async function regist(content: string, title: string) {
     if (content.length > 0 && title.length > 0) {
-      await fetch(`https://react-blog-4bm0.onrender.com/api/article`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/article`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

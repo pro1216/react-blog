@@ -14,10 +14,12 @@ export function Home(): JSX.Element {
   const [article, setArticle] = useState<Article[]>([
     { _id: "", title: "", content: "" },
   ]);
+ 
   const navigate = useNavigate();
   const fetchArticles = async () => {
     try {
-      const res = await fetch("https://react-blog-4bm0.onrender.com/api/article");
+      console.log(process.env.REACT_APP_API_URL);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/article`);
       if (!res.ok) {
         throw new Error(`HTTPエラー:${res.status}`);
       }

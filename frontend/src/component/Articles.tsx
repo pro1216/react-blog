@@ -17,7 +17,7 @@ export function Articles ()  {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch("https://react-blog-4bm0.onrender.com/api/article");
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/article`);
             if (!res.ok) {
                 throw new Error(`HTTPエラー:${res.status}`);
             }
@@ -33,7 +33,7 @@ export function Articles ()  {
     }, []);
     const addUser = async () => {
         try {
-            const res = await fetch("https://react-blog-4bm0.onrender.com/api/article", {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/article`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title, content })
