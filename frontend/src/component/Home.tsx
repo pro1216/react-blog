@@ -17,7 +17,7 @@ export function Home(): JSX.Element {
   const navigate = useNavigate();
   const fetchArticles = async () => {
     try {
-      const res = await fetch("http://localhost:3002/api/article");
+      const res = await fetch("https://react-blog-4bm0.onrender.com/api/article");
       if (!res.ok) {
         throw new Error(`HTTPエラー:${res.status}`);
       }

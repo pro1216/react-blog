@@ -33,7 +33,7 @@ export default function SearchResult() {
     try {
       console.log(urlParams.toString());
       const res = await fetch(
-        `http://localhost:3002/api/article/search?${urlParams.toString()}`
+        `https://react-blog-4bm0.onrender.com/api/article/search?${urlParams.toString()}`
       );
       if (!res.ok) {
         throw new Error(`HTTPエラー:${res.status}`);

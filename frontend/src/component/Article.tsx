@@ -24,7 +24,7 @@ export function Article() {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:3002/api/article/${id}`)
+      fetch(`https://react-blog-4bm0.onrender.com/api/article/${id}`)
         .then((res) => res.json())
         .then((data) => setArticle(data))
         .catch(() => console.error("記事を取得できませんでした"));
