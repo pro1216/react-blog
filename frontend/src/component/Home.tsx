@@ -18,7 +18,7 @@ export function Home(): JSX.Element {
   const navigate = useNavigate();
   const deleteArtile = async (id:string) => {
     try {
-      const res = await fetch(`http://localhost:3002/api/article/delete/${id}`,{
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/article/delete/${id}`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",

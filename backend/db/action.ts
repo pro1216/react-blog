@@ -118,6 +118,28 @@ export function userRoutes(dbService: DbService) {
       }
     }
   );
+   //編集した記事を削除
+  router.post(
+    "/article/delete/:id",
+    async (req: Request, res: Response) => {
+      try {
+        const {id} = req.params;
+        const db = await dbService.connect();
+         const objectId = new ObjectId(id);
+
+        const result = await db.collection("article").deleteOne({_id:objectId});
+
+        if(result.deletedCount === 0){
+          throw res.status(404).json({message:"記事がありません"});
+        }
+        res
+          .status(201)
+          .json({ message: "記事を削除いたしました。", id: result.deletedCount });
+      } catch (error) {
+        throw res.status(500).json({ message: "異常なエラーが発生しました" });
+      }
+    }
+  );
 
   //フォームデータ登録
   router.post("/form", async (req: Request, res: Response) => {
