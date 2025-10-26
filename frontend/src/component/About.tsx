@@ -15,7 +15,7 @@ export function About() {
 
 function Intro() {
   return (
-    <div className="py-8 px-8 max-w-sm  mx-auto space-y-2 bg-white rounded-xl shadow-lg sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:gap-x-6 mb-6">
+    <div className="py-8 px-8 max-w-sm bg-gray-50 mx-auto space-y-2  rounded-xl shadow-lg sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:gap-x-6 mb-6">
       <img
         className="block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0"
         src={photo}
@@ -64,7 +64,7 @@ function IntroTech() {
 
   return (
     <div className="flex-1 pb-16 p-4">
-      <div className="py-8 px-8 max-w-sm mx-auto space-y-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-700 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:gap-x-6 mb-6">
+      <div className="py-8 px-8 max-w-sm mx-auto space-y-2 bg-gray-100 dark:0 rounded-xl shadow-lg dark:shadow-gray-700 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:gap-x-6 mb-6">
         <div className="flex flex-col items-center bg-gray-50 dark:bg-gray-900 py-8 px-4 rounded-lg shadow-md dark:shadow-gray-700">
           <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-4">
             技術の経験年数

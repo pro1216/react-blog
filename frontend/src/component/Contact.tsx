@@ -6,7 +6,7 @@ import "../styles/contact.css";
 
 export default function Contact() {
   const [formData, setFormData] = React.useState<FormData | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [status, setStatus] = React.useState("idle");
   const {
     register,
     handleSubmit,
@@ -14,8 +14,8 @@ export default function Contact() {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+    setStatus("sending");
     try {
-      setLoading(true);
       fetch(`${process.env.REACT_APP_API_URL}/api/form`, {
         method: "POST",
         headers: {
@@ -27,13 +27,14 @@ export default function Contact() {
         .then((data) => {
           setFormData(data);
           alert("送信が完了しました。");
+          setStatus("done");
         });
     } catch (error) {
       console.error("フォーム送信エラー", error);
       alert("送信に失敗しました。");
     } finally {
-      setLoading(false);
     }
+  
   };
   return (
     <Common>
@@ -90,7 +91,19 @@ export default function Contact() {
                 <p className="error-message">{errors.message.message}</p>
               )}
             </div>
-            <button type="submit">{loading ? "送信中..." : "送信"}</button>
+            <button
+              className={`send-button ${status}`}
+              onClick={() => onsubmit}
+              disabled={status === "sending"}
+            >
+              {status === "idle" && "送信する"}
+              {status === "sending" && (
+                <div className="spinner"></div>
+              )}
+              {status === "done" && (
+                <span className="checkmark"> 送信完了！</span>
+              )}
+            </button>
           </form>
         </div>
       </main>

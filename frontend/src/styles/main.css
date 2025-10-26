@@ -159,7 +159,16 @@ footer {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
+#delete{
+  background-color: var(--accent);
+  color: var(--text);
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 .search-bar {
   position: absolute;
   align-items: right;

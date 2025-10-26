@@ -16,6 +16,21 @@ export function Home(): JSX.Element {
   ]);
  
   const navigate = useNavigate();
+  const deleteArtile = async (id:string) => {
+    try {
+      const res = await fetch(`http://localhost:3002/api/article/delete/${id}`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }});
+       if (!res.ok) {
+        throw new Error(`HTTPエラー:${res.status}`);
+      }
+      fetchArticles(); 
+    } catch (error) {
+      
+    }
+  }
   const fetchArticles = async () => {
     try {
       console.log(process.env.REACT_APP_API_URL);
@@ -91,6 +106,7 @@ export function Home(): JSX.Element {
                 >
                   続きを読む
                 </button>
+                <button id="delete" onClick={() => deleteArtile(ds._id)}>削除</button>
               </article>
             </section>
           );
