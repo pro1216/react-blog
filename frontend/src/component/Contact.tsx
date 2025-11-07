@@ -32,6 +32,7 @@ export default function Contact() {
     } catch (error) {
       console.error("フォーム送信エラー", error);
       alert("送信に失敗しました。");
+      setStatus("done");
     } finally {
     }
   

@@ -50,10 +50,12 @@ export function Home(): JSX.Element {
   });
   if (article.length < 1 || article[0]._id === "") {
     return (
+      <Common>
       <main>
         <p>記事がありません</p>
         <button onClick={() => navigate(`/newArticle`)}>記事を追加</button>
       </main>
+      </Common>
     );
   }
   //記事の文字数取得
